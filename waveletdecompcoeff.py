@@ -141,8 +141,3 @@ for i, temp_file in enumerate(temp_files):
         print(f"Error appending temp file {temp_file}: {e}")
 
 print(f"Saved joint wavelet features to {output_file}")
-
-print("Reading output file...")
-df = pd.read_csv("db6_coeff.tsv", sep='\t')
-print(df.shape)
-print(df.head())
