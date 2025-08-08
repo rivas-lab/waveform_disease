@@ -11,22 +11,11 @@ We had two primary sources of data:
 We followed the following data processing steps:
   1. Edit pipeline to extract detailed energy coefficients from raw waveform data\
      **Data Shape**: 48,842 × 60,733
-  2. Perform IPCA to reduce dimensionality. Performing PCA on a smaller subset of individuals suggested we needed at least 5K components to retain 95% variance\
-     **Data Shape**: 48,842 × 5,001
-  3. Merge data: demographic data, genetic PCs, and 132 binary disease phenotype IDs. Relevant phenotype IDs were identified from previous linear regressions run on energy measures\
+  2. Merge data: demographic data, genetic PCs, and 132 binary disease phenotype IDs. Relevant phenotype IDs were identified from previous linear regressions run on energy measures\
      **Data Shape**: 48,842 × 5,139
+  3. Run (updated LDSC)
+  4. Wavelet Decomposition
+  5. GWAS
+  6. Run LDSC for heritability and genetic correlation
 
-## Incremental PCA
-Incremental PCA (IPCA) enables scalable dimensionality reduction by processing data in sequential mini-batches, avoiding the need to load the full dataset into memory.
 
-**IPCA Steps**
-1. Initial Batch
-  * Load and standardize the first chunk (e.g., 1,000 samples).
-  * Fit IPCA to initialize principal components.
-  * Transform the chunk into PC space.
-2. Sequential Updates for Each New Chunk:
-  * Standardize features using initial parameters.
-  * Incrementally update the IPCA model.
-  * Transform the chunk into PC space.
-3. Final Output:
-  * Concatenate all transformed chunks into a complete low-dimensional representation.
