@@ -1,0 +1,57 @@
+import glob
+import numpy as np
+import pywt
+import pandas as pd
+from pathlib import Path
+
+# Directory containing ECG .npy files
+ecg_dir = "/scratch/groups/mrivas/jackos/ecgs/"
+# Wavelet parameters
+wavelet = 'db6'  # Daubechies wavelet
+level = 6  # Decomposition level
+
+# Get all .npy files
+ecg_files = glob.glob(ecg_dir + "*.npy")
+print(f"Total number of ECG files: {len(ecg_files)}")
+
+# Initialize dataset
+dataset = []
+
+# Process each ECG file
+for file_path in ecg_files:
+    # Extract old_id from filename (e.g., 3068103 from 3068103_20205_2_0.npy)
+    filename = Path(file_path).stem
+    old_id = filename.split('_')[0]
+
+    # Load ECG data
+    ecg_data = np.load(file_path)
+
+    # Initialize row for this ECG file
+    row = {'old_id': old_id}
+
+    # Perform wavelet decomposition for each lead
+    num_leads = ecg_data.shape[1]  # Typically 12 for ECG
+    for lead_idx in range(num_leads):
+        lead_data = ecg_data[:, lead_idx]
+        # Wavelet decomposition with symmetric mode
+        coeffs = pywt.wavedec(lead_data, wavelet=wavelet, level=level, mode='symmetric')
+        # coeffs = [cA_6, cD_6, cD_5, ..., cD_1]
+
+        # Compute energy for each coefficient set
+        for lvl, coeff in enumerate(coeffs):
+            if lvl == 0:
+                level_label = 'approx'  # Approximation coefficients (A6)
+            else:
+                level_label = f'level{level - lvl + 1}'  # Detail coefficients (level6 to level1, i.e., D6 to D1)
+            energy_key = f'lead{lead_idx + 1}_{level_label}_energy'
+            # Compute energy as sum of squares
+            row[energy_key] = np.sum(np.square(coeff))
+
+    # Append to dataset
+    dataset.append(row)
+
+# Create DataFrame and save to CSV
+df = pd.DataFrame(dataset)
+df.to_csv("ecg_energy_dataset.csv", index=False)
+print(f"Dataset saved to ecg_energy_dataset.csv")
+
