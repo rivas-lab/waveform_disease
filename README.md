@@ -2,8 +2,10 @@
 Current ECG signal analysis in large-scale health datasets primarily relies on summary statistics, such as wavelet energy measures, to assess the relationship between heart signals and disease. This project examines the individual detailed wavelet coefficients in an effort to uncover new predictive biomarkers and potentially improve disease risk prediction performance.
 
 We also explore the reconstruction of ECG waveforms from reduced-dimensional representations, allowing interpretable recovery of signal morphology from compressed data. In parallel, our objective is to estimate the heritability and genetic correlation of the energy features derived from wavelets using genome-wide association studies (GWAS), which may reveal genetic influences on different ECG features.
+We also explore the reconstruction of ECG waveforms from reduced-dimensional representations, allowing interpretable recovery of signal morphology from compressed data. In parallel, our objective is to estimate the heritability and genetic correlation of the energy features derived from wavelets using genome-wide association studies (GWAS), which may reveal genetic influences on different ECG features.
 
 ## Data Pipeline
+
 
 We had two primary sources of data:
 
