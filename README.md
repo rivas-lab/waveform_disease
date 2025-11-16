@@ -9,7 +9,7 @@ We also explore the reconstruction of ECG waveforms from reduced-dimensional rep
 
 We had two primary sources of data:
 
-- **UK Biobank:** ECG signal files for 72,716 individuals
+- **UK Biobank:** ECG signal files for 47,052 individuals white british only
 - **Demographic data:** Genetic principal components, biomarkers, and disease phenotypes
 
 **Data Processing Steps:**
@@ -20,7 +20,7 @@ We had two primary sources of data:
 2. **Wavelet Decomposition**
    - Use the script `ecg_energy.py` (utilizing the PyWavelets library) to decompose ECG signals per lead using the Daubechies 6 (db6) wavelet at level 6.
    - Calculate energy features by summing the squares of coefficients per lead, per individual.
-   - The resulting dataset: 72,716 rows × 85 columns. After mapping IDs to match the `master.phe` UK Biobank file and removing duplicates, we get our phenotype file wavelet_dedup_new.phe: 66,775 rows × 86 columns.
+   - The resulting dataset: 72,716 rows × 85 columns. After mapping IDs to match the `master.phe` UK Biobank file and removing duplicates and keeping white british, we get our phenotype file wavelet_dedup_new.phe: 47,052 rows × 86 columns.
 
 3. **GWAS Analysis**
    - For each energy feature phenotype, perform Genome-Wide Association Studies (GWAS) using PLINK2.
@@ -57,6 +57,9 @@ We had two primary sources of data:
 
 7. **Run Genetic Correlation Analysis**
    - Use `ldsc_all_rg.sh` to compute genetic correlation between the munged GWAS files and external reference files (e.g., munged FinnGen I9 phenotype files).
+  
+8. **Finemapping**
+   - Using Susie Inf  
 
 ## References
 
